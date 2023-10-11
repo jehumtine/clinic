@@ -1,0 +1,118 @@
+{% extends "base.html"%}
+{% block body %}
+<h3 class="m-4">
+  <i class="fa-solid fa-list fa-lg" style="color: #696c72;"></i>
+  All Wards</h3>
+<div class="col-12">
+  {% if wards%}
+  <div class="card bg-light ms-4 me-4 mb-4">
+      <div class="card-header">Wards
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <div class="table-responsive">
+              <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Ward Id</th>
+                      <th scope="col">Ward Name</th>
+                      <th scope="col">Number of Beds</th>
+                      <th scope="col">Nurse In Charge</th>
+                      <th scope="col">Ward Type</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for ward in wards%}
+                    <tr>
+                      <td>{{ward.ward_id}}</td>
+                      <td>{{ward.ward_name}}</td>
+                      <td>{{ward.number_beds}}</td>
+                      <td>{{ward.nurse_in_charge}}</td>
+                      <td>{{ward.ward_type}}</td>
+                      <td>
+                      <id>
+                        <button type="button" class="btn btn-success me-1" href="{% url 'view_patient' id=ward.ward_id %}" data-bs-toggle="modal" data-bs-target="#myModal{{ward.ward_id}}">
+                          <i class="fa-solid fa-circle-info" fa-lg style="color: #fff;"></i>
+                        </button>
+                      </id>
+                        <!--Modal--View Patient -->
+                        <div class="modal" id="myModal{{ward.ward_id}}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">
+                                  Ward: {{ward.ward_name}} {{ward.ward_type}}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true"></span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <ul class="list-unstyled">
+                                    <li>Ward Id: <strong>{{ward.ward_id}}</strong></li>
+                                    <li>Ward Name: <strong>{{ward.ward_name}}</strong></li>
+                                    <li>Number Of Beds: <strong>{{ward.number_beds}}</strong></li>
+                                    <li>Nurse In Charge: <strong>{{ward.nurse_in_charge}}</strong></li>
+                                    <li>Ward Type: <strong>{{ward.ward_type}}</strong></li>
+                                </ul>
+                              </div>
+                              <div class="modal-footer">                  
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      <a class="btn btn-warning me-1" href="{% url 'edit' id=ward.ward_id %}">
+                        <i class="fa-solid fa-pen-to-square fa-lg" style="color: #fff;"></i>
+                      </a>
+
+                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{ward.ward_id}}">
+                        <i class="fa-solid fa-trash-can fa-lg"></i>
+                      </button>
+
+                        <!--Modal--Delete Patient -->
+                        <div class="modal" id="delete{{ward.ward_id}}" tabindex="-1" aria-labbelledby="myModalLable2" aria-hidden = "true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">
+                                  Ward: {{ward.ward_name}} {{ward.ward_type}}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true"></span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                  <p>Are you sure you want to delete this ward?</p>
+                              </div>          
+                              <div class="modal-footer"> 
+                                <form action="{% url 'delete' ward.ward_id %}" method="POST">
+                                  {% csrf_token %}
+                                  <input type ="submit" class="btn btn-primary" value="Delete">
+                                </form>                 
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                    </td>
+                    </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+          </div>
+        </p>
+      </div>
+    </div>
+  {% else%}
+
+                        <a class="nav-link" href="{% url 'add' %}">
+                            <i class="fa-solid fa-plus" style="color: #696c72;"></i> 
+                            Add Ward</a>
+  <h5 class="alert alert-primary ms-4 me-4 mb-4">No Wards</h5>
+  {%endif%}
+  
+</div>
+{%endblock%}
